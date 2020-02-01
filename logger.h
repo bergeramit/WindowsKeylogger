@@ -13,6 +13,7 @@ using namespace std;
 enum eLoggerStatus {
 	LOGGER_UNDEFINED,
 	LOGGER_SUCCESS,
+	LOGGER_ERROR_FAILED_TO_LOG,
 	LOGGER_ERROR
 };
 

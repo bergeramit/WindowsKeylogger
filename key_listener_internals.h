@@ -17,6 +17,7 @@ class KeyListener {
 		    WPARAM wParam,
 		    LPARAM lParam
 		);
+
     private:
         Logger m_KeyLogger;
         Logger m_DebugLogger;

@@ -3,15 +3,20 @@
 #include <iostream>
 #include <stdio.h>
 #include <windows.h>
+#include <cstring>
 #include <bits/stdc++.h>
 
 #include "logger.h"
 
 using namespace std;
 
-#ifdef DEBUG
-void printError()
+
+/*
+ * This funciton only does something if -DDEBUG is used in compilation.
+ */
+void debugPrintReturnCode()
 {
+#ifdef DEBUG
     LPVOID lpMsgBuf;
     DWORD dw = GetLastError();
 
@@ -24,11 +29,12 @@ void printError()
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
         (LPTSTR) &lpMsgBuf,
         0, NULL );
-    printf("Failed with: %s\n", (LPTSTR)lpMsgBuf);
+    printf("Return Code: %s\n", (LPTSTR)lpMsgBuf);
 
     LocalFree(lpMsgBuf);
-}
 #endif
+    return;
+}
 
 Logger::Logger(
     string &sLoggerPath,
@@ -39,16 +45,14 @@ Logger::Logger(
     strcpy(this->m_loggerFullPath, fullName.c_str());
     this->m_loggerHandler = CreateFile(
         this->m_loggerFullPath,
-        GENERIC_WRITE,
+        FILE_APPEND_DATA,
         FILE_SHARE_WRITE,
         NULL,
-        CREATE_ALWAYS,
-        FILE_ATTRIBUTE_NORMAL,
+        OPEN_ALWAYS,
+        FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH,
         NULL);
 
-#ifdef DEBUG
-    printError();
-#endif
+    debugPrintReturnCode();
 /*
     if (this->m_loggerHandler == INVALID_HANDLE_VALUE)
     {
@@ -65,16 +69,14 @@ Logger::Logger(
     strcpy(this->m_loggerFullPath, sloggerFullPath.c_str());
     this->m_loggerHandler = CreateFile(
         (LPCSTR)&(this->m_loggerFullPath),
-        GENERIC_WRITE,
+        FILE_APPEND_DATA,
         FILE_SHARE_READ,
         NULL,
-        CREATE_ALWAYS,
-        FILE_ATTRIBUTE_NORMAL
+        OPEN_ALWAYS,
+        FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH,
         NULL);
 
-#ifdef DEBUG
-    printError();
-#endif
+    debugPrintReturnCode();
 /*
     if (this->m_loggerHandler == INVALID_HANDLE_VALUE)
     {
@@ -87,31 +89,40 @@ Logger::Logger(
 Logger::~Logger()
 {
     CloseHandle(this->m_loggerHandler);
-
-#ifdef DEBUG
-    printError();
-#endif
-}
-
-eLoggerStatus Logger::logLine(const char *value, int size)
-{
-    DWORD bytesWritten;
-    WriteFile(m_loggerHandler, value, size, &bytesWritten, NULL);
-    WriteFile(m_loggerHandler, "\n", 1, &bytesWritten, NULL);
+    debugPrintReturnCode();
 }
 
 eLoggerStatus Logger::log(const char *value, int size)
 {
+    eLoggerStatus rc = LOGGER_UNDEFINED;
     DWORD bytesWritten;
     WriteFile(m_loggerHandler, value, size, &bytesWritten, NULL);
+
+    debugPrintReturnCode();
+
+    if (bytesWritten != size) {
+        cout << "bytesWritten: " << bytesWritten << "size" << size << "value" << value << endl;
+        rc = LOGGER_ERROR_FAILED_TO_LOG;
+        goto Exit;
+    }
+
+    rc = LOGGER_SUCCESS;
+Exit:
+    return rc;
+}
+
+eLoggerStatus Logger::logLine(const char *value, int size)
+{
+    char *sFullLine = new char[size + 1];
+    strncpy(sFullLine, value, size);
+    sFullLine[size] = '\n';
+
+    return this->log(sFullLine, size + 1);
 }
 
 void Logger::hide()
 {
     DWORD attributes = GetFileAttributes(this->m_loggerFullPath);
     SetFileAttributes(this->m_loggerFullPath, attributes | FILE_ATTRIBUTE_HIDDEN);
-
-#ifdef DEBUG
-    printError();
-#endif
+    debugPrintReturnCode();
 }
