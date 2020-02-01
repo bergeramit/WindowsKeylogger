@@ -1,9 +1,10 @@
 # WindowsKeylogger
 
-Compile:
-  g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o klaf.exe
-with Debug output:
-  g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o klaf.exe -DDEBUG
+Compile
+g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o klaf.exe
+
+with Debug output
+g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o klaf.exe -DDEBUG
   
 Usage: klaf.exe ==DIR_TO_KEYLOGGER_LOGS==
 
