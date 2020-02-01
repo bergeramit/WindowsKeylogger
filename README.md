@@ -1,19 +1,29 @@
 # WindowsKeylogger
 
-## Compile
-g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o klaf.exe
-
-## Compile with Debug output
-g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o klaf.exe -DDEBUG
+Key logger in C++. save log files in given directory (file)
 
 ## Usage
-klaf.exe ==DIR_TO_KEYLOGGER_LOGS==
+run Start_Klogger.ps1 in powershell
 
-# Version 1.1 release
+## Compile
+g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o OUTPUT_EXE
+
+## Compile with Debug output
+g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o OUTPUT_EXE -DDEBUG
+
+# Version 2.0 release Notes
 ### Features
 1. Fixed bug that makes it possible to append to the already exists file
 2. get path to log file from the cmd
-
+3. Easily run using a powershell script
+4. Hidden console and Background proccess
+### To-Do
+1. does not understand multi keys presses
+2. win32 cpp conventions is terribly implemented
+3. no timestamps or debug logs
+4. get log files names from the cmd line/ runner script
+### Bugs
+1. do not handle file name that makes it unable to run (due to privilages)
 
 # Last Versions - Release Notes
 ## Version 1.0 release
