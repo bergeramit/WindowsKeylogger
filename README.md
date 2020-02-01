@@ -5,11 +5,11 @@ Key logger in C++
 ## Usage
 run Start_Klogger.ps1 in powershell
 ### Notes
-1. When runnig the script the console will close and no signs of the key logger will 
-be visible besides the name of the process in the Task Manager's window.
-2. there are two files in the provided directory .keyslog and .debuglog
-    1. .keyslog - actual key presses
-    2. .debuglog - debug output
+>1. When runnig the script the console will close and no signs of the key logger will 
+>be visible besides the name of the process in the Task Manager's window.
+>2. there are two files in the provided directory .keyslog and .debuglog
+>    1. .keyslog - actual key presses
+>    2. .debuglog - debug output
 
 ## Compile
 `g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o OUTPUT_EXE`
@@ -36,7 +36,7 @@ be visible besides the name of the process in the Task Manager's window.
 # Last Versions - Release Notes
 ## Version 1.0 release
 ### Features
-1. log is written to a hidden file in C:\temp (configurable in main.cpp)
+1. ~~log is written to a hidden file in C:\temp (configurable in main.cpp)~~ - changed in 2.0
 2. log keys outside of the console
 ### To-Do
 1. does not understand multi keys presses
