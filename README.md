@@ -12,10 +12,10 @@ be visible besides the name of the process in the Task Manager's window.
     2. .debuglog - debug output
 
 ## Compile
-g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o OUTPUT_EXE
+`g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o OUTPUT_EXE`
 
 ## Compile with Debug output
-g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o OUTPUT_EXE -DDEBUG
+`g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o OUTPUT_EXE -DDEBUG`
 
 # Version 2.0 release Notes
 ### Features
