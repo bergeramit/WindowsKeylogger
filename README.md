@@ -1,6 +1,6 @@
 # WindowsKeylogger
 
-Key logger in C++. save log files in given directory (file)
+Key logger in C++
 
 ## Usage
 run Start_Klogger.ps1 in powershell
