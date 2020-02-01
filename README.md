@@ -17,6 +17,7 @@ g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o OUTPUT_EXE -DDEBUG
 2. get path to log file from the cmd
 3. Easily run using a powershell script
 4. Hidden console and Background proccess
+5. Indicative PowerShell script
 ### To-Do
 1. does not understand multi keys presses
 2. win32 cpp conventions is terribly implemented
