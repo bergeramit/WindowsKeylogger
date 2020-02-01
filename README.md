@@ -24,6 +24,7 @@ g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o OUTPUT_EXE -DDEBUG
 4. get log files names from the cmd line/ runner script
 ### Bugs
 1. do not handle file name that makes it unable to run (due to privilages)
+2. log's dir is given to the proccess as command line args which makes it easy to see.
 
 # Last Versions - Release Notes
 ## Version 1.0 release
