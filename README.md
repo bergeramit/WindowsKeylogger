@@ -7,9 +7,9 @@ run Start_Klogger.ps1 in powershell
 ### Notes
 1. When runnig the script the console will close and no signs of the key logger will 
 be visible besides the name of the process in the Task Manager's window.
-2. there are two files in the provided directory .keyslog and .debuglog:
-2.1. .keyslog - actual key presses
-2.2. .debuglog - debug output
+2. there are two files in the provided directory .keyslog and .debuglog
+    1. .keyslog - actual key presses
+    2. .debuglog - debug output
 
 ## Compile
 g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o OUTPUT_EXE
@@ -41,12 +41,12 @@ g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o OUTPUT_EXE -DDEBUG
 ### To-Do
 1. does not understand multi keys presses
 2. win32 cpp conventions is terribly implemented
-3. console windows left open
+3. ~~console windows left open~~ - fixed in 2.0
 4. no timestamps or debug logs
-5. get the path to the files from the cmd
+5. ~~get the path to the files from the cmd~~ - fixed in 2.0
 
 ### Bugs
-1. could not append to the file nor open it after the first use
+1. ~~could not append to the file nor open it after the first use~~ - fixed in 2.0
 
 
 
