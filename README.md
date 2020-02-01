@@ -1,14 +1,14 @@
 # WindowsKeylogger
 
-Compile
+## Compile
 g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o klaf.exe
 
-with Debug output
+## Compile with Debug output
 g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -o klaf.exe -DDEBUG
   
 Usage: klaf.exe ==DIR_TO_KEYLOGGER_LOGS==
 
-## Version 1.1 release
+# Version 1.1 release
 ### Features
 1. Fixed bug that makes it possible to append to the already exists file
 2. get path to log file from the cmd
