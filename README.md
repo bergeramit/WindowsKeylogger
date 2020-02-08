@@ -11,10 +11,10 @@ be visible besides the name of the process in the Task Manager's window.
     1. .keyslog - actual key presses
     2. .debuglog - debug output
 
-## Compile
+## Compile Alone
 `g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -DKEYLOGGER_FILE_NAME=\"KEYLOG_FILENAME\" -DKEYLOGGER_DEBUG_FILE_NAME=\"DEBUGLOG_FILENAME\" -o OUTPUT_EXE`
 
-## Compile with Debug output
+## Compile Alone with Debug output
 `g++ ./main.cpp ./key_listener.cpp ./logger.cpp -std=c++14 -DKEYLOGGER_FILE_NAME=\"KEYLOG_FILENAME\" -DKEYLOGGER_DEBUG_FILE_NAME=\"DEBUGLOG_FILENAME\" -o OUTPUT_EXE -DDEBUG`
 
 # Version 2.0 release Notes
@@ -28,6 +28,7 @@ be visible besides the name of the process in the Task Manager's window.
 1. does not understand multi keys presses
 2. ~~win32 cpp conventions is terribly implemented~~ - Refactor Conventions
 3. no timestamps or debug logs
+4. Refactor powershell script
 4. get log files names from the cmd line/ runner script
 ### Bugs
 1. do not handle file name that makes it unable to run (due to privilages)
