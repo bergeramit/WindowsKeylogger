@@ -37,14 +37,14 @@ void debugPrintReturnCode()
 }
 
 Logger::Logger(
-    string &sLoggerPath,
-    string sLoggerFilename
+    string &dir,
+    string file_name
     )
 {
-    string fullName = sLoggerPath + "\\" + sLoggerFilename;
-    strcpy(this->m_loggerFullPath, fullName.c_str());
-    this->m_loggerHandler = CreateFile(
-        this->m_loggerFullPath,
+    string fullName = dir + "\\" + file_name;
+    strcpy(this->full_path, fullName.c_str());
+    this->file_handler = CreateFile(
+        this->full_path,
         FILE_APPEND_DATA,
         FILE_SHARE_WRITE,
         NULL,
@@ -54,7 +54,7 @@ Logger::Logger(
 
     debugPrintReturnCode();
 /*
-    if (this->m_loggerHandler == INVALID_HANDLE_VALUE)
+    if (this->file_handler == INVALID_HANDLE_VALUE)
     {
       // Failed to open/create file
       throw 1;
@@ -63,12 +63,12 @@ Logger::Logger(
 }
 
 Logger::Logger(
-    string &sloggerFullPath
+    string &path
     )
 {
-    strcpy(this->m_loggerFullPath, sloggerFullPath.c_str());
-    this->m_loggerHandler = CreateFile(
-        (LPCSTR)&(this->m_loggerFullPath),
+    strcpy(this->full_path, path.c_str());
+    this->file_handler = CreateFile(
+        (LPCSTR)&(this->full_path),
         FILE_APPEND_DATA,
         FILE_SHARE_READ,
         NULL,
@@ -78,7 +78,7 @@ Logger::Logger(
 
     debugPrintReturnCode();
 /*
-    if (this->m_loggerHandler == INVALID_HANDLE_VALUE)
+    if (this->file_handler == INVALID_HANDLE_VALUE)
     {
       // Failed to open/create file
       throw 1;
@@ -88,15 +88,15 @@ Logger::Logger(
 
 Logger::~Logger()
 {
-    CloseHandle(this->m_loggerHandler);
+    CloseHandle(this->file_handler);
     debugPrintReturnCode();
 }
 
-eLoggerStatus Logger::log(const char *value, int size)
+LOGGER_Status_t Logger::LOGGER_log(const char *value, int size)
 {
-    eLoggerStatus rc = LOGGER_UNDEFINED;
+    LOGGER_Status_t rc = LOGGER_UNDEFINED;
     DWORD bytesWritten;
-    WriteFile(m_loggerHandler, value, size, &bytesWritten, NULL);
+    WriteFile(file_handler, value, size, &bytesWritten, NULL);
 
     debugPrintReturnCode();
 
@@ -111,18 +111,18 @@ Exit:
     return rc;
 }
 
-eLoggerStatus Logger::logLine(const char *value, int size)
+LOGGER_Status_t Logger::LOGGER_log_line(const char *value, int size)
 {
     char *sFullLine = new char[size + 1];
     strncpy(sFullLine, value, size);
     sFullLine[size] = '\n';
 
-    return this->log(sFullLine, size + 1);
+    return this->LOGGER_log(sFullLine, size + 1);
 }
 
 void Logger::hide()
 {
-    DWORD attributes = GetFileAttributes(this->m_loggerFullPath);
-    SetFileAttributes(this->m_loggerFullPath, attributes | FILE_ATTRIBUTE_HIDDEN);
+    DWORD attributes = GetFileAttributes(this->full_path);
+    SetFileAttributes(this->full_path, attributes | FILE_ATTRIBUTE_HIDDEN);
     debugPrintReturnCode();
 }

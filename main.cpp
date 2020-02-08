@@ -13,11 +13,11 @@ void Stealth()
 }
 
 int main(int argc, const char *argv[]) {
-    eKLoggerStatus rc = UNDEFINED;
+    KLOGGER_error_codes_t rc = UNDEFINED;
     string path;
 
     if (argc < 2) {
-        cout << "Usage: klaf.exe ==DIR_TO_STORE_FILE==" << endl;
+        cout << "Usage: " << argv[0] << " ==DIR_TO_STORE_FILE==" << endl;
         rc = ERROR_BAD_ARGS;
         goto Exit;
     }
@@ -25,7 +25,7 @@ int main(int argc, const char *argv[]) {
 
     cout << "Init files at: " << path << endl;
 
-    rc = initKLogger(path);
+    rc = KLOGGER_init_klogger(path);
     if (SUCCESS != rc) {
         cout << "Init Failed with error code: " << rc << endl;
         goto Exit;
@@ -37,7 +37,7 @@ int main(int argc, const char *argv[]) {
      */
     Stealth();
 
-    rc = beginLogging();
+    rc = KLOGGER_begin_logging();
     if (SUCCESS != rc) {
         cout << "Finish Failed with error code: " << rc << endl;
         goto Exit;

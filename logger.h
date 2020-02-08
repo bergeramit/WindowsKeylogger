@@ -10,7 +10,7 @@ using namespace std;
 #define LOGGER_MAX_PATH_SIZE (1000)
 #define LOGGER_MAX_MULTI_KEYS (10)
 
-enum eLoggerStatus {
+enum LOGGER_Status_t {
 	LOGGER_UNDEFINED,
 	LOGGER_SUCCESS,
 	LOGGER_ERROR_FAILED_TO_LOG,
@@ -20,16 +20,16 @@ enum eLoggerStatus {
 class Logger {
 	public:
 
-		Logger(string &sloggerFullPath);
-		Logger(string &sLoggerPath, string sLoggerFilename);
+		Logger(string &path);
+		Logger(string &dir, string file_name);
 		~Logger();
-		eLoggerStatus logLine(const char *value, int size);
-		eLoggerStatus log(const char *value, int size);
+		LOGGER_Status_t LOGGER_log_line(const char *value, int size);
+		LOGGER_Status_t LOGGER_log(const char *value, int size);
 		void hide();
 
 	private:
-		char m_loggerFullPath[LOGGER_MAX_PATH_SIZE];
-		HANDLE m_loggerHandler;
+		char full_path[LOGGER_MAX_PATH_SIZE];
+		HANDLE file_handler;
 };
 
 #endif /* LOGGER_H */

